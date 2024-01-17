@@ -7,15 +7,25 @@
 
 import SwiftUI
 
+
 struct AnimalCategoriesView: View {
     
-    private let animals: [AnimalCategoryModel] = AnimalCategoryModel.mockItems
+    private let animalCategories: [AnimalCategoryModel] = AnimalCategoryModel.mockItems
     
     var body: some View {
-        List(animals, id: \.self) { category in
-            AnimalCategoryItemView(category: category)
-                .listRowSeparator(.hidden)
-                .listRowBackground(Color.brandedPurple)
+        List {
+            ForEach(animalCategories, id: \.self) { category in
+                AnimalCategoryItemView(category: category)
+                    .listRowSeparator(.hidden)
+                    .listRowBackground(Color.brandedPurple)
+                    .background {
+                        NavigationLink(
+                            "",
+                            destination: AnimalFactsDetailsView(category: category)
+                        )
+                        .opacity(0) // fixed list row arrow
+                    }
+            }
         }
         .listStyle(.plain)
         .navigationTitle(Constants.title)

@@ -14,7 +14,7 @@ struct PremiumLockView: View {
             Image(systemName: "lock.fill")
                 .font(.system(size: 20))
                 .foregroundColor(.blue)
-            Text("Premium")
+            Text(Constants.title)
                 .font(.system(size: 16, weight: .medium))
                 .foregroundColor(.blue)
         }

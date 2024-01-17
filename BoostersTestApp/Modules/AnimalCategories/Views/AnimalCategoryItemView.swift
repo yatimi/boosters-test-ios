@@ -9,11 +9,11 @@ import SwiftUI
 
 struct AnimalCategoryItemView: View {
     
-    var category: AnimalCategoryModel
+    let category: AnimalCategoryModel
     
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: Constants.containerCornerRadius)
+            RoundedRectangle(cornerRadius: AppConstants.containerCornerRadius)
                 .fill(.white)
                 .ignoresSafeArea(.all)
                 .shadow(color: .black.opacity(0.2), radius: 2, x: 2, y: 2)
@@ -33,7 +33,7 @@ struct AnimalCategoryItemView: View {
                         .rotationEffect(.init(degrees: -15))
                         .frame(alignment: .trailing)
                         .offset(x: UIScreen.main.bounds.width / 3.5)
-                    RoundedRectangle(cornerRadius: Constants.containerCornerRadius)
+                    RoundedRectangle(cornerRadius: AppConstants.containerCornerRadius)
                         .fill(.black.opacity(0.40))
                 }
             }
@@ -57,7 +57,7 @@ struct AnimalCategoryItemView: View {
                 PremiumLockView()
             }
         }
-        .padding(.vertical, Constants.containerCornerRadius)
+        .padding(.vertical, AppConstants.containerCornerRadius)
     }
     
     private var categoryImage: some View {
@@ -68,10 +68,10 @@ struct AnimalCategoryItemView: View {
                 .frame(size: Constants.imageSize)
                 .clipped()
                 .mask {
-                    RoundedRectangle(cornerRadius: Constants.containerCornerRadius / 2)
+                    RoundedRectangle(cornerRadius: AppConstants.containerCornerRadius / 2)
                 }
         } placeholder: {
-            RoundedRectangle(cornerRadius: Constants.containerCornerRadius / 2)
+            RoundedRectangle(cornerRadius: AppConstants.containerCornerRadius / 2)
                 .foregroundColor(.gray)
                 .frame(size: Constants.imageSize)
         }
@@ -81,7 +81,6 @@ struct AnimalCategoryItemView: View {
     private struct Constants {
         static let imageSize: CGSize = CGSize(width: 120, height: 100)
         static let comingSoonImageSize: CGSize = CGSize(width: 100, height: 80)
-        static let containerCornerRadius: CGFloat = 6
         static let containerVerticalPadding: CGFloat = 4
         static let cardHeight: CGFloat = imageSize.height
     }
