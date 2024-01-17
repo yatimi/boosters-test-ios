@@ -9,9 +9,13 @@ import SwiftUI
 
 @main
 struct BoostersTestAppApp: App {
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            NavigationStack {
+                AnimalCategoriesView()
+            }
         }
     }
+    
 }
