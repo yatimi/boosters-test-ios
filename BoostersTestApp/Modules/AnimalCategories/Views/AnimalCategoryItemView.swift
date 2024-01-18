@@ -86,7 +86,3 @@ struct AnimalCategoryItemView: View {
     }
     
 }
-
-#Preview {
-    AnimalCategoryItemView(category: .mockItems[1])
-}

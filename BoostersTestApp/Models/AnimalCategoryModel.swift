@@ -7,56 +7,34 @@
 
 import Foundation
 
-struct AnimalCategoryModel: Codable, Hashable {
+struct AnimalCategoryModel: Hashable {
     let title: String
     let description: String
     let image: URL
     let order: Int
     let status: AnimalCategoryStatus
     let content: [AnimalFact]?
+    
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        
+        self.title = try container.decode(String.self, forKey: .title)
+        self.description = try container.decode(String.self, forKey: .description)
+        self.image = try container.decode(URL.self, forKey: .image)
+        self.order = try container.decode(Int.self, forKey: .order)
+        
+        if let content = try? container.decode([AnimalFact].self, forKey: .content) {
+            self.content = content
+            self.status = try container.decode(AnimalCategoryStatus.self, forKey: .status)
+        } else {
+            self.content = nil
+            self.status = .comingSoon
+        }
+    }
 }
 
-extension AnimalCategoryModel {
-    
-    static var mockItems: [Self] {
-        return [
-            AnimalCategoryModel(
-                title: "Dogs",
-                description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi",
-                image: URL(string: "https://upload.wikimedia.org/wikipedia/commons/2/2b/WelshCorgi.jpeg")!,
-                order: 1,
-                status: .free,
-                content: [
-                    AnimalFact(image: URL(string: "https://upload.wikimedia.org/wikipedia/commons/2/2b/WelshCorgi.jpeg")!, fact: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi"),
-                    AnimalFact(image: URL(string: "https://upload.wikimedia.org/wikipedia/commons/2/2b/WelshCorgi.jpeg")!, fact: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi"),
-                    AnimalFact(image: URL(string: "https://upload.wikimedia.org/wikipedia/commons/2/2b/WelshCorgi.jpeg")!, fact: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi")
-                ]
-            ),
-            AnimalCategoryModel(
-                title: "Dragons",
-                description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi",
-                image: URL(string: "https://static.wikia.nocookie.net/monster/images/6/6e/DragonRed.jpg")!,
-                order: 2,
-                status: .paid,
-                content: [
-                    AnimalFact(image: URL(string: "https://upload.wikimedia.org/wikipedia/commons/2/2b/WelshCorgi.jpeg")!, fact: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi"),
-                    AnimalFact(image: URL(string: "https://upload.wikimedia.org/wikipedia/commons/2/2b/WelshCorgi.jpeg")!, fact: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi"),
-                    AnimalFact(image: URL(string: "https://upload.wikimedia.org/wikipedia/commons/2/2b/WelshCorgi.jpeg")!, fact: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi")
-                ]
-            ),
-            AnimalCategoryModel(
-                title: "Pandas",
-                description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi",
-                image: URL(string: "https://upload.wikimedia.org/wikipedia/commons/8/8d/Lightmatter_panda.jpg")!,
-                order: 3,
-                status: .comingSoon,
-                content: [
-                    AnimalFact(image: URL(string: "https://upload.wikimedia.org/wikipedia/commons/2/2b/WelshCorgi.jpeg")!, fact: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi"),
-                    AnimalFact(image: URL(string: "https://upload.wikimedia.org/wikipedia/commons/2/2b/WelshCorgi.jpeg")!, fact: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi"),
-                    AnimalFact(image: URL(string: "https://upload.wikimedia.org/wikipedia/commons/2/2b/WelshCorgi.jpeg")!, fact: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi")
-                ]
-            )
-        ]
+extension AnimalCategoryModel: Codable {
+    enum CodingKeys: String, CodingKey {
+        case title, description, image, order, status, content
     }
-    
 }
