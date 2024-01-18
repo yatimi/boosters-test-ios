@@ -27,6 +27,8 @@ struct AnimalCategoriesFeature {
         Reduce { state, action in
             switch action {
             case .fetchAnimalCategories:
+                guard state.animalCategories.isEmpty else { return .none }
+                
                 state.isLoading = true
                 return .run { send in
                     guard let url = URL(string: AppConstants.jsonURLString) else { return }

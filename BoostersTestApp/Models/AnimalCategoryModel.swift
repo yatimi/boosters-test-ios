@@ -16,12 +16,6 @@ struct AnimalCategoryModel: Codable, Hashable {
     let content: [AnimalFact]?
 }
 
-extension AnimalCategoryModel: Equatable {
-    static func == (lhs: AnimalCategoryModel, rhs: AnimalCategoryModel) -> Bool {
-        lhs.title == rhs.title
-    }
-}
-
 extension AnimalCategoryModel {
     
     static var mockItems: [Self] {

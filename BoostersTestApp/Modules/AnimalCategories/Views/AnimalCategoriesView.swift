@@ -40,7 +40,7 @@ struct AnimalCategoriesView: View {
                         ProgressView()
                     }
                 }
-                .onAppear {
+                .task {
                     viewStore.send(.fetchAnimalCategories)
                 }
                 .refreshable {
