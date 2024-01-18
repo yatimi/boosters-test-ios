@@ -10,5 +10,6 @@ import Foundation
 struct AppConstants {
     
     static let containerCornerRadius: CGFloat = 6
+    static let jsonURLString: String = "https://raw.githubusercontent.com/AppSci/promova-test-task-iOS/main/animals.json"
     
 }

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
 
 @main
 struct BoostersTestAppApp: App {
@@ -13,7 +14,10 @@ struct BoostersTestAppApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationStack {
-                AnimalCategoriesView()
+                AnimalCategoriesView(store: Store(initialState: AnimalCategoriesFeature.State()) {
+                    AnimalCategoriesFeature()
+                        ._printChanges()
+                })
             }
         }
     }

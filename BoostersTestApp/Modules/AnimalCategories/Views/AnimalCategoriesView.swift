@@ -6,38 +6,65 @@
 //
 
 import SwiftUI
-
+import ComposableArchitecture
 
 struct AnimalCategoriesView: View {
     
-    private let animalCategories: [AnimalCategoryModel] = AnimalCategoryModel.mockItems
+    let store: StoreOf<AnimalCategoriesFeature>
     
     var body: some View {
-        List {
-            ForEach(animalCategories, id: \.self) { category in
-                AnimalCategoryItemView(category: category)
-                    .listRowSeparator(.hidden)
-                    .listRowBackground(Color.brandedPurple)
-                    .background {
-                        NavigationLink(
-                            "",
-                            destination: AnimalFactsDetailsView(category: category)
-                        )
-                        .opacity(0) // fixed list row arrow
+        NavigationStackStore(self.store.scope(state: \.path, action: { .path($0) })) {
+            WithViewStore(self.store, observe: { $0 }) { viewStore in
+                ZStack {
+                    if !viewStore.animalCategories.isEmpty && !viewStore.isLoading {
+                        List {
+                            ForEach(viewStore.animalCategories, id: \.self) { category in
+                                ZStack {
+                                    AnimalCategoryItemView(category: category)
+                                    NavigationLink(state: AnimalFactsDetailsFeature.State(category: category)) {
+                                        EmptyView()
+                                    }.opacity(0) // hide list right arrow
+                                }
+                            }
+                            .listRowSeparator(.hidden)
+                            .listRowBackground(Color.brandedPurple)
+                        }
+                        .listStyle(.plain)
+                        .navigationTitle(Constants.title)
+                        .background(.brandedPurple)
+                    } else {
+                        ContentUnavailableView { Text(Constants.contentUnavailableText) }
                     }
+                    
+                    if viewStore.isLoading {
+                        ProgressView()
+                    }
+                }
+                .onAppear {
+                    viewStore.send(.fetchAnimalCategories)
+                }
+                .refreshable {
+                    viewStore.send(.fetchAnimalCategories)
+                }
             }
+        } destination: { store in
+            AnimalFactsDetailsView(store: store)
         }
-        .listStyle(.plain)
-        .navigationTitle(Constants.title)
-        .background(.brandedPurple)
     }
     
     private struct Constants {
         #warning("Localize")
         static let title: String = "Animal Categories"
+        static let contentUnavailableText: String = "The list of categories is empty.\nTry again later"
     }
 }
 
 #Preview {
-    AnimalCategoriesView()
+    NavigationStack {
+        AnimalCategoriesView(
+            store: Store(initialState: AnimalCategoriesFeature.State()) {
+                AnimalCategoriesFeature()
+            }
+        )
+    }
 }

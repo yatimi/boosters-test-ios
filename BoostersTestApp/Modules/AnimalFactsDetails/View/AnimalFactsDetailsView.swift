@@ -6,64 +6,77 @@
 //
 
 import SwiftUI
+import ComposableArchitecture
 
 struct AnimalFactsDetailsView: View {
     
-    @Environment(\.presentationMode) var presentationMode
+    let store: StoreOf<AnimalFactsDetailsFeature>
     
-    let category: AnimalCategoryModel
+    @Environment(\.presentationMode) var presentationMode
     @State private var currentFactIndex = 0
     
     var body: some View {
-        ZStack {
-            Color.brandedPurple
-                .ignoresSafeArea(.all)
-            
-            VStack {
-                if category.content == nil {
-                    ContentUnavailableView(
-                        Constants.contentUnavailableText,
-                        systemImage: "pawprint.fill"
-                    )
-                } else {
-                    ZStack {
-                        Color.white
-                        VStack {
-                            AnimalTabsView(
-                                content: category.content, 
-                                currentFactIndex: $currentFactIndex
-                            )
-                            Spacer()
-                            actionButtonsView
+        WithViewStore(self.store, observe: { $0 }) { viewStore in
+            ZStack {
+                Color.brandedPurple
+                    .ignoresSafeArea(.all)
+                
+                VStack {
+                    if viewStore.category.content == nil {
+                        ContentUnavailableView(
+                            Constants.contentUnavailableText,
+                            systemImage: "pawprint.fill"
+                        )
+                        
+                    } else {
+                        ZStack(alignment: .center) {
+                            RoundedRectangle(cornerRadius: AppConstants.containerCornerRadius)
+                                .fill(Color.white)
+                            VStack {
+                                AnimalTabsView(
+                                    content: viewStore.category.content,
+                                    currentFactIndex: $currentFactIndex
+                                )
+                                Spacer()
+                                actionButtonsView
+                            }
                         }
+                        .padding()
                     }
-                    .frame(height: 500)
                 }
             }
+            .onChange(of: self.currentFactIndex, initial: viewStore.currentFactIndex != currentFactIndex) { oldValue, newValue in
+                viewStore.send(.didChangedIndex(to: newValue))
+            }
+            .onChange(of: viewStore.currentFactIndex, initial: viewStore.currentFactIndex != currentFactIndex) { oldValue, newValue in
+                self.currentFactIndex = newValue
+            }
+            .navigationBarBackButtonHidden(true)
+            .navigationBarItems(leading: navigationBackButton)
         }
-        .navigationBarBackButtonHidden(true)
-        .navigationBarItems(leading: navigationBackButton)
     }
     
     private var actionButtonsView: some View {
-        HStack {
-            Button {
-                self.currentFactIndex -= 1
-            } label: {
-                makeActionButtonView(for: .prev)
+        WithViewStore(self.store, observe: { $0 }) { viewStore in
+            HStack {
+                Button {
+                    self.store.send(.onPrev)
+                } label: {
+                    makeActionButtonView(for: .prev)
+                }
+                .disabled(viewStore.currentFactIndex == 0)
+                
+                Spacer()
+                
+                Button {
+                    self.store.send(.onNext)
+                } label: {
+                    makeActionButtonView(for: .next)
+                }
+                .disabled(viewStore.currentFactIndex >= (viewStore.category.content?.count ?? 0) - 1)
             }
-            .disabled(currentFactIndex == 0)
-            
-            Spacer()
-            
-            Button {
-                self.currentFactIndex += 1
-            } label: {
-                makeActionButtonView(for: .next)
-            }
-            .disabled(currentFactIndex == (category.content?.count ?? 0) - 1)
+            .padding()
         }
-        .padding()
     }
     
     private func makeActionButtonView(for action: ButtonActionType) -> some View {
@@ -79,21 +92,23 @@ struct AnimalFactsDetailsView: View {
     }
     
     private var navigationBackButton: some View {
-        Button(action: {
-            self.presentationMode.wrappedValue.dismiss()
-        }) {
-            HStack(spacing: 0) {
-                Image(systemName: "chevron.left")
-                    .font(.system(size: 16))
-                    .foregroundStyle(.black)
-                Text("\(category.title)")
-                    .foregroundStyle(.black)
+        WithViewStore(self.store, observe: { $0 }) { viewStore in
+            Button(action: {
+                self.presentationMode.wrappedValue.dismiss()
+            }) {
+                HStack(spacing: 0) {
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 20))
+                        .foregroundStyle(.black)
+                    Text("\(viewStore.category.title)")
+                        .foregroundStyle(.black)
+                }
+                .padding(.horizontal, 4)
             }
-            .padding(.horizontal, 4)
+            .background(.white)
+            .foregroundStyle(.black)
+            .clipShape(Capsule())
         }
-        .background(.white)
-        .foregroundStyle(.black)
-        .clipShape(Capsule())
     }
     
     private struct Constants {

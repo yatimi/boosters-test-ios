@@ -14,7 +14,7 @@ struct AnimalTabsView: View {
     
     var body: some View {
         VStack {
-            TabView(selection: self.$currentFactIndex) {
+            TabView(selection: $currentFactIndex) {
                 if let facts = content {
                     ForEach(facts.indices, id: \.self) { index in
                         let animalFact = facts[index]
@@ -24,7 +24,6 @@ struct AnimalTabsView: View {
                     .padding(.horizontal, 10)
                 }
             }
-            .frame(minHeight: 350)
             .animation(.linear, value: self.currentFactIndex)
             .tabViewStyle(.page(indexDisplayMode: .never))
         }

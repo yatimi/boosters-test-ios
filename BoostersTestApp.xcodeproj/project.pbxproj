@@ -22,6 +22,10 @@
 		96DD94B92B58328F0096F7E9 /* TabCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DD94B82B58328E0096F7E9 /* TabCardView.swift */; };
 		96DD94BC2B5832A40096F7E9 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DD94BB2B5832A40096F7E9 /* AppConstants.swift */; };
 		96DD94BE2B5832FE0096F7E9 /* AnimalTabsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DD94BD2B5832FE0096F7E9 /* AnimalTabsView.swift */; };
+		96DD94C02B5838920096F7E9 /* AnimalCategoriesFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DD94BF2B5838920096F7E9 /* AnimalCategoriesFeature.swift */; };
+		96DD94C72B5839050096F7E9 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 96DD94C62B5839050096F7E9 /* ComposableArchitecture */; };
+		96DD94C92B5839570096F7E9 /* ComposableArchitecture in Frameworks */ = {isa = PBXBuildFile; productRef = 96DD94C82B5839570096F7E9 /* ComposableArchitecture */; };
+		96DD94CD2B583F8C0096F7E9 /* AnimalFactsDetailsFeature.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DD94CC2B583F8C0096F7E9 /* AnimalFactsDetailsFeature.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -41,6 +45,8 @@
 		96DD94B82B58328E0096F7E9 /* TabCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabCardView.swift; sourceTree = "<group>"; };
 		96DD94BB2B5832A40096F7E9 /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
 		96DD94BD2B5832FE0096F7E9 /* AnimalTabsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimalTabsView.swift; sourceTree = "<group>"; };
+		96DD94BF2B5838920096F7E9 /* AnimalCategoriesFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimalCategoriesFeature.swift; sourceTree = "<group>"; };
+		96DD94CC2B583F8C0096F7E9 /* AnimalFactsDetailsFeature.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimalFactsDetailsFeature.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -48,6 +54,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				96DD94C92B5839570096F7E9 /* ComposableArchitecture in Frameworks */,
+				96DD94C72B5839050096F7E9 /* ComposableArchitecture in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -57,7 +65,7 @@
 		9608C3AD2B581DCF001C4EDD /* AnimalFactsDetails */ = {
 			isa = PBXGroup;
 			children = (
-				9608C3AF2B581DDA001C4EDD /* State */,
+				9608C3AF2B581DDA001C4EDD /* Reducer */,
 				9608C3AE2B581DD7001C4EDD /* View */,
 			);
 			path = AnimalFactsDetails;
@@ -73,11 +81,12 @@
 			path = View;
 			sourceTree = "<group>";
 		};
-		9608C3AF2B581DDA001C4EDD /* State */ = {
+		9608C3AF2B581DDA001C4EDD /* Reducer */ = {
 			isa = PBXGroup;
 			children = (
+				96DD94CC2B583F8C0096F7E9 /* AnimalFactsDetailsFeature.swift */,
 			);
-			path = State;
+			path = Reducer;
 			sourceTree = "<group>";
 		};
 		9615F0852B57FA5000C23DDE = {
@@ -137,7 +146,7 @@
 		9615F0A12B57FAED00C23DDE /* AnimalCategories */ = {
 			isa = PBXGroup;
 			children = (
-				9615F0A62B57FB8C00C23DDE /* State */,
+				9615F0A62B57FB8C00C23DDE /* Reducer */,
 				9615F0A22B57FAF700C23DDE /* Views */,
 			);
 			path = AnimalCategories;
@@ -165,11 +174,12 @@
 			path = Models;
 			sourceTree = "<group>";
 		};
-		9615F0A62B57FB8C00C23DDE /* State */ = {
+		9615F0A62B57FB8C00C23DDE /* Reducer */ = {
 			isa = PBXGroup;
 			children = (
+				96DD94BF2B5838920096F7E9 /* AnimalCategoriesFeature.swift */,
 			);
-			path = State;
+			path = Reducer;
 			sourceTree = "<group>";
 		};
 		9615F0B02B5807F500C23DDE /* Extensions */ = {
@@ -220,6 +230,10 @@
 			dependencies = (
 			);
 			name = BoostersTestApp;
+			packageProductDependencies = (
+				96DD94C62B5839050096F7E9 /* ComposableArchitecture */,
+				96DD94C82B5839570096F7E9 /* ComposableArchitecture */,
+			);
 			productName = BoostersTestApp;
 			productReference = 9615F08E2B57FA5000C23DDE /* BoostersTestApp.app */;
 			productType = "com.apple.product-type.application";
@@ -248,6 +262,9 @@
 				Base,
 			);
 			mainGroup = 9615F0852B57FA5000C23DDE;
+			packageReferences = (
+				96DD94C52B5839050096F7E9 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */,
+			);
 			productRefGroup = 9615F08F2B57FA5000C23DDE /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -282,8 +299,10 @@
 				9608C3AC2B58110A001C4EDD /* PremiumLockView.swift in Sources */,
 				9615F0B32B58080500C23DDE /* View + FrameSize.swift in Sources */,
 				9615F0A42B57FAFD00C23DDE /* AnimalCategoriesView.swift in Sources */,
+				96DD94CD2B583F8C0096F7E9 /* AnimalFactsDetailsFeature.swift in Sources */,
 				96DD94BC2B5832A40096F7E9 /* AppConstants.swift in Sources */,
 				9608C3B12B581DF0001C4EDD /* AnimalFactsDetailsView.swift in Sources */,
+				96DD94C02B5838920096F7E9 /* AnimalCategoriesFeature.swift in Sources */,
 				9615F0AC2B57FD6500C23DDE /* AnimalCategoryStatus.swift in Sources */,
 				9615F0922B57FA5000C23DDE /* BoostersTestAppApp.swift in Sources */,
 				96DD94B72B58321F0096F7E9 /* ButtonActionType.swift in Sources */,
@@ -492,6 +511,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		96DD94C52B5839050096F7E9 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-composable-architecture";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.6.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		96DD94C62B5839050096F7E9 /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 96DD94C52B5839050096F7E9 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
+		};
+		96DD94C82B5839570096F7E9 /* ComposableArchitecture */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 96DD94C52B5839050096F7E9 /* XCRemoteSwiftPackageReference "swift-composable-architecture" */;
+			productName = ComposableArchitecture;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 9615F0862B57FA5000C23DDE /* Project object */;
 }

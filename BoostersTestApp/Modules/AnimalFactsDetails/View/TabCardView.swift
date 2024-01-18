@@ -19,24 +19,27 @@ struct TabCardView: View {
                 AsyncImage(url: animalFact.image) { image in
                     image
                         .resizable()
-                        .scaledToFill()
-                        .frame(height: 300)
-                        .clipped()
+                        .frame(height: Constants.imageSize)
                         .mask {
                             RoundedRectangle(cornerRadius: AppConstants.containerCornerRadius / 2)
                         }
+                        .clipped()
                 } placeholder: {
                     RoundedRectangle(cornerRadius: AppConstants.containerCornerRadius / 2)
                         .foregroundColor(.gray)
-                        .frame(height: 300)
+                        .frame(height: Constants.imageSize)
                 }
                 
                 Text(animalFact.fact)
                     .lineLimit(nil)
                     .foregroundStyle(.black)
             }
-            .padding([.leading, .trailing])
+            .clipShape(RoundedRectangle(cornerRadius: AppConstants.containerCornerRadius))
+            .padding()
         }
-        .clipShape(RoundedRectangle(cornerRadius: AppConstants.containerCornerRadius))
+    }
+    
+    private struct Constants {
+        static let imageSize: CGFloat = 250
     }
 }
