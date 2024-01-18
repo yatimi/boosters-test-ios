@@ -12,8 +12,9 @@ struct AnimalFactsDetailsView: View {
     
     let store: StoreOf<AnimalFactsDetailsFeature>
     
-    @Environment(\.presentationMode) var presentationMode
     @State private var currentFactIndex = 0
+    @State private var showShareSheet = false
+    @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
         WithViewStore(self.store, observe: { $0 }) { viewStore in
@@ -24,7 +25,7 @@ struct AnimalFactsDetailsView: View {
                 VStack {
                     if viewStore.category.content == nil {
                         ContentUnavailableView(
-                            Constants.contentUnavailableText,
+                            "There are no facts in the \n\(viewStore.category.title) category yet :(",
                             systemImage: "pawprint.fill"
                         )
                         
@@ -51,8 +52,16 @@ struct AnimalFactsDetailsView: View {
             .onChange(of: viewStore.currentFactIndex, initial: viewStore.currentFactIndex != currentFactIndex) { oldValue, newValue in
                 self.currentFactIndex = newValue
             }
+            .sheet(isPresented: $showShareSheet) {
+                let currentIndex = viewStore.currentFactIndex
+                let facts = viewStore.category.content ?? []
+                let currentFact = facts[currentIndex]
+                let activityItem: Any = "Fact of category \(viewStore.category.title): \n\(currentFact.fact)"
+                
+                ShareSheet(activityItems: [activityItem])
+            }
             .navigationBarBackButtonHidden(true)
-            .navigationBarItems(leading: navigationBackButton)
+            .navigationBarItems(leading: navigationBackButton, trailing: navigationShareButton)
         }
     }
     
@@ -111,8 +120,21 @@ struct AnimalFactsDetailsView: View {
         }
     }
     
+    private var navigationShareButton: some View {
+        WithViewStore(self.store, observe: { $0 }) { viewStore in
+            let isHidden: Bool = (viewStore.category.content ?? []).isEmpty
+            HStack {
+                Image(systemName: "square.and.arrow.up")
+                    .font(.system(size: 16))
+                    .foregroundStyle(.black)
+                    .onTapGesture {
+                        self.showShareSheet.toggle()
+                    }
+            }.opacity(isHidden ? 0 : 1)
+        }
+    }
+    
     private struct Constants {
-        static let contentUnavailableText: String = "There is no information available about this category."
         static let actionButtonSize: CGSize = CGSize(width: 50, height: 50)
     }
     

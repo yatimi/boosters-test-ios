@@ -34,9 +34,9 @@ struct TabCardView: View {
                     .lineLimit(nil)
                     .foregroundStyle(.black)
             }
-            .clipShape(RoundedRectangle(cornerRadius: AppConstants.containerCornerRadius))
-            .padding()
+            .padding(.horizontal)
         }
+        .padding(.top)
     }
     
     private struct Constants {

@@ -20,7 +20,7 @@ struct AnimalCategoriesFeature {
     enum Action {
         case fetchAnimalCategories
         case didReceiveAnimalCategories([AnimalCategoryModel])
-        case path(StackAction<AnimalFactsDetailsFeature.State, AnimalFactsDetailsFeature.Action>)
+        case detailsPath(StackAction<AnimalFactsDetailsFeature.State, AnimalFactsDetailsFeature.Action>)
     }
     
     var body: some ReducerOf<AnimalCategoriesFeature> {
@@ -42,13 +42,12 @@ struct AnimalCategoriesFeature {
                 state.isLoading = false
                 return .none
                 
-            case .path:
+            case .detailsPath:
                 return .none
             }
-        }.forEach(\.path, action: /Action.path) {
+        }.forEach(\.path, action: /Action.detailsPath) {
             AnimalFactsDetailsFeature()
         }
     }
     
 }
-

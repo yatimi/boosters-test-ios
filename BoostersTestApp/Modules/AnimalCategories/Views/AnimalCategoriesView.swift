@@ -13,17 +13,22 @@ struct AnimalCategoriesView: View {
     let store: StoreOf<AnimalCategoriesFeature>
     
     var body: some View {
-        NavigationStackStore(self.store.scope(state: \.path, action: { .path($0) })) {
+        NavigationStackStore(self.store.scope(state: \.path, action: { .detailsPath($0) })) {
             WithViewStore(self.store, observe: { $0 }) { viewStore in
                 ZStack {
-                    if !viewStore.animalCategories.isEmpty && !viewStore.isLoading {
+                    if viewStore.animalCategories.isEmpty && !viewStore.isLoading {
+                        ContentUnavailableView { 
+                            Text(Constants.contentUnavailableText)
+                        }
+                    } else {
                         List {
                             ForEach(viewStore.animalCategories, id: \.self) { category in
                                 ZStack {
                                     AnimalCategoryItemView(category: category)
                                     NavigationLink(state: AnimalFactsDetailsFeature.State(category: category)) {
                                         EmptyView()
-                                    }.opacity(0) // hide list right arrow
+                                    }
+                                    .opacity(0) // hide list right arrow
                                 }
                             }
                             .listRowSeparator(.hidden)
@@ -32,8 +37,6 @@ struct AnimalCategoriesView: View {
                         .listStyle(.plain)
                         .navigationTitle(Constants.title)
                         .background(.brandedPurple)
-                    } else {
-                        ContentUnavailableView { Text(Constants.contentUnavailableText) }
                     }
                     
                     if viewStore.isLoading {
