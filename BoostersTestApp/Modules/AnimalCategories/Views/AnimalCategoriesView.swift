@@ -13,46 +13,49 @@ struct AnimalCategoriesView: View {
     let store: StoreOf<AnimalCategoriesFeature>
     
     var body: some View {
-        NavigationStackStore(self.store.scope(state: \.path, action: { .detailsPath($0) })) {
-            WithViewStore(self.store, observe: { $0 }) { viewStore in
-                ZStack {
-                    if viewStore.animalCategories.isEmpty && !viewStore.isLoading {
-                        ContentUnavailableView { 
-                            Text(Constants.contentUnavailableText)
-                        }
-                    } else {
-                        List {
-                            ForEach(viewStore.animalCategories, id: \.self) { category in
-                                ZStack {
-                                    AnimalCategoryItemView(category: category)
-                                    NavigationLink(state: AnimalFactsDetailsFeature.State(category: category)) {
-                                        EmptyView()
-                                    }
-                                    .opacity(0) // hide list right arrow
+        WithViewStore(store, observe: { $0 }) { viewStore in
+            ZStack {
+                if viewStore.animalCategories.isEmpty && !viewStore.isLoading {
+                    ContentUnavailableView {
+                        Text(Constants.contentUnavailableText)
+                    }
+                } else {
+                    List {
+                        ForEach(viewStore.animalCategories, id: \.self) { category in
+                            AnimalCategoryItemView(category: category)
+                                .onTapGesture {
+                                    store.send(.didSelectCategory(category))
                                 }
-                            }
-                            .listRowSeparator(.hidden)
-                            .listRowBackground(Color.brandedPurple)
                         }
-                        .listStyle(.plain)
-                        .navigationTitle(Constants.title)
-                        .background(.brandedPurple)
+                        .listRowSeparator(.hidden)
+                        .listRowBackground(Color.brandedPurple)
                     }
-                    
-                    if viewStore.isLoading {
-                        ProgressView()
-                    }
+                    .listStyle(.plain)
+                    .navigationTitle(Constants.title)
+                    .background(.brandedPurple)
                 }
-                .task {
-                    viewStore.send(.fetchAnimalCategories)
-                }
-                .refreshable {
-                    viewStore.send(.fetchAnimalCategories)
-                }
+                
+                ActivityIndicatorView(isPresented: .constant(viewStore.isLoading))
             }
-        } destination: { store in
-            AnimalFactsDetailsView(store: store)
+            .task {
+                viewStore.send(.fetchAnimalCategories)
+            }
+            .refreshable {
+                viewStore.send(.fetchAnimalCategories)
+            }
         }
+        .alert(
+            store: self.store.scope(state: \.$alert, action: \.alert)
+        )
+        .navigationDestination(
+            store: self.store.scope(
+                state: \.$selection,
+                action: AnimalCategoriesFeature.Action.selection
+            ),
+            destination: { store in
+                AnimalFactsDetailsView(store: store)
+            }
+        )
     }
     
     private struct Constants {

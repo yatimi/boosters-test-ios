@@ -17,7 +17,7 @@ struct AnimalFactsDetailsView: View {
     @Environment(\.presentationMode) var presentationMode
     
     var body: some View {
-        WithViewStore(self.store, observe: { $0 }) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             ZStack {
                 Color.brandedPurple
                     .ignoresSafeArea(.all)
@@ -66,7 +66,7 @@ struct AnimalFactsDetailsView: View {
     }
     
     private var actionButtonsView: some View {
-        WithViewStore(self.store, observe: { $0 }) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             HStack {
                 Button {
                     self.store.send(.onPrev)
@@ -101,7 +101,7 @@ struct AnimalFactsDetailsView: View {
     }
     
     private var navigationBackButton: some View {
-        WithViewStore(self.store, observe: { $0 }) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             Button(action: {
                 self.presentationMode.wrappedValue.dismiss()
             }) {
@@ -121,7 +121,7 @@ struct AnimalFactsDetailsView: View {
     }
     
     private var navigationShareButton: some View {
-        WithViewStore(self.store, observe: { $0 }) { viewStore in
+        WithViewStore(store, observe: { $0 }) { viewStore in
             let isHidden: Bool = (viewStore.category.content ?? []).isEmpty
             HStack {
                 Image(systemName: "square.and.arrow.up")

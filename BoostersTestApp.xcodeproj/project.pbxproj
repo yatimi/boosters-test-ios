@@ -19,6 +19,8 @@
 		9615F0AE2B57FD6A00C23DDE /* AnimalFact.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9615F0AD2B57FD6A00C23DDE /* AnimalFact.swift */; };
 		9615F0B32B58080500C23DDE /* View + FrameSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9615F0B22B58080500C23DDE /* View + FrameSize.swift */; };
 		969E49B02B599D4A00CDBE22 /* ShareSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969E49AF2B599D4A00CDBE22 /* ShareSheet.swift */; };
+		969E49B32B5A859200CDBE22 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969E49B22B5A859200CDBE22 /* APIClient.swift */; };
+		969E49B52B5A9FBA00CDBE22 /* ActivityIndicatorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 969E49B42B5A9FBA00CDBE22 /* ActivityIndicatorView.swift */; };
 		96DD94B72B58321F0096F7E9 /* ButtonActionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DD94B62B58321F0096F7E9 /* ButtonActionType.swift */; };
 		96DD94B92B58328F0096F7E9 /* TabCardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DD94B82B58328E0096F7E9 /* TabCardView.swift */; };
 		96DD94BC2B5832A40096F7E9 /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 96DD94BB2B5832A40096F7E9 /* AppConstants.swift */; };
@@ -43,6 +45,8 @@
 		9615F0AD2B57FD6A00C23DDE /* AnimalFact.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimalFact.swift; sourceTree = "<group>"; };
 		9615F0B22B58080500C23DDE /* View + FrameSize.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "View + FrameSize.swift"; sourceTree = "<group>"; };
 		969E49AF2B599D4A00CDBE22 /* ShareSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareSheet.swift; sourceTree = "<group>"; };
+		969E49B22B5A859200CDBE22 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		969E49B42B5A9FBA00CDBE22 /* ActivityIndicatorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityIndicatorView.swift; sourceTree = "<group>"; };
 		96DD94B62B58321F0096F7E9 /* ButtonActionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonActionType.swift; sourceTree = "<group>"; };
 		96DD94B82B58328E0096F7E9 /* TabCardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabCardView.swift; sourceTree = "<group>"; };
 		96DD94BB2B5832A40096F7E9 /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
@@ -110,6 +114,7 @@
 		9615F0902B57FA5000C23DDE /* BoostersTestApp */ = {
 			isa = PBXGroup;
 			children = (
+				969E49B12B5A858D00CDBE22 /* Network */,
 				9615F0A52B57FB2200C23DDE /* Models */,
 				9615F09F2B57FAD500C23DDE /* GlobalState */,
 				9615F0A02B57FAE200C23DDE /* Modules */,
@@ -205,8 +210,17 @@
 			isa = PBXGroup;
 			children = (
 				969E49AF2B599D4A00CDBE22 /* ShareSheet.swift */,
+				969E49B42B5A9FBA00CDBE22 /* ActivityIndicatorView.swift */,
 			);
 			path = Views;
+			sourceTree = "<group>";
+		};
+		969E49B12B5A858D00CDBE22 /* Network */ = {
+			isa = PBXGroup;
+			children = (
+				969E49B22B5A859200CDBE22 /* APIClient.swift */,
+			);
+			path = Network;
 			sourceTree = "<group>";
 		};
 		96DD94B52B5832190096F7E9 /* Internal Model */ = {
@@ -303,6 +317,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9615F0A82B57FC7100C23DDE /* AnimalCategoryItemView.swift in Sources */,
+				969E49B32B5A859200CDBE22 /* APIClient.swift in Sources */,
 				96DD94B92B58328F0096F7E9 /* TabCardView.swift in Sources */,
 				9615F0AE2B57FD6A00C23DDE /* AnimalFact.swift in Sources */,
 				96DD94BE2B5832FE0096F7E9 /* AnimalTabsView.swift in Sources */,
@@ -316,6 +331,7 @@
 				9608C3B12B581DF0001C4EDD /* AnimalFactsDetailsView.swift in Sources */,
 				96DD94C02B5838920096F7E9 /* AnimalCategoriesFeature.swift in Sources */,
 				9615F0AC2B57FD6500C23DDE /* AnimalCategoryStatus.swift in Sources */,
+				969E49B52B5A9FBA00CDBE22 /* ActivityIndicatorView.swift in Sources */,
 				9615F0922B57FA5000C23DDE /* BoostersTestAppApp.swift in Sources */,
 				96DD94B72B58321F0096F7E9 /* ButtonActionType.swift in Sources */,
 			);

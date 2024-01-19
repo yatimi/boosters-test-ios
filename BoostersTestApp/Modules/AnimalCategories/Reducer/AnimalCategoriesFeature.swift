@@ -11,16 +11,32 @@ import ComposableArchitecture
 @Reducer
 struct AnimalCategoriesFeature {
     
+    private let apiClient = APIClient()
+    
     struct State: Equatable {
         var isLoading = true
         var animalCategories: [AnimalCategoryModel] = []
-        var path = StackState<AnimalFactsDetailsFeature.State>()
+        
+        var selectedCategory: AnimalCategoryModel?
+        @PresentationState var alert: AlertState<Action.Alert>?
+        @PresentationState var selection: AnimalFactsDetailsFeature.State?
     }
     
     enum Action {
         case fetchAnimalCategories
         case didReceiveAnimalCategories([AnimalCategoryModel])
-        case detailsPath(StackAction<AnimalFactsDetailsFeature.State, AnimalFactsDetailsFeature.Action>)
+        
+        case didSelectCategory(AnimalCategoryModel)
+        
+        case selection(PresentationAction<AnimalFactsDetailsFeature.Action>)
+        case alert(PresentationAction<Alert>)
+        
+        case alertAdFinished
+        
+        enum Alert {
+            case showAd
+            case comingSoon
+        }
     }
     
     var body: some ReducerOf<AnimalCategoriesFeature> {
@@ -31,9 +47,7 @@ struct AnimalCategoriesFeature {
                 
                 state.isLoading = true
                 return .run { send in
-                    guard let url = URL(string: AppConstants.jsonURLString) else { return }
-                    let (data, _) = try await URLSession.shared.data(from: url)
-                    let categories = try JSONDecoder().decode([AnimalCategoryModel].self, from: data)
+                    let categories = try await apiClient.fetchAnimalCategories()
                     await send(.didReceiveAnimalCategories(categories))
                 }
                 
@@ -42,12 +56,66 @@ struct AnimalCategoriesFeature {
                 state.isLoading = false
                 return .none
                 
-            case .detailsPath:
+            case .alert(.presented(.showAd)):
+                state.isLoading = true
+                return .run { send in
+                    try await Task.sleep(for: .seconds(Constants.paidAlertDurationSleep))
+                    await send(.alertAdFinished)
+                }
+                
+            case .alert:
+                return .none
+                
+            case let .didSelectCategory(category):
+                state.selectedCategory = category
+                
+                switch category.status {
+                case .free:
+                    state.alert = nil
+                    state.selection = AnimalFactsDetailsFeature.State(category: category)
+                case .paid:
+                    state.alert = AlertState {
+                        TextState("Watch Ad to continue")
+                    } actions: {
+                        ButtonState(role: .cancel) {
+                            TextState("Cancel")
+                        }
+                        ButtonState(action: .showAd) {
+                            TextState("Show Ad")
+                        }
+                    }
+                case .comingSoon:
+                    state.selection = nil
+                    state.alert = AlertState {
+                        TextState("Coming Soon")
+                    } actions: {
+                        ButtonState(role: .cancel) {
+                            TextState("Ok")
+                        }
+                    }
+                }
+                return .none
+                
+            case .alertAdFinished:
+                state.alert = nil
+                state.isLoading = false
+                if let category = state.selectedCategory {
+                    state.selection = AnimalFactsDetailsFeature.State(category: category)
+                }
+                return .none
+                
+            case .selection(_):
                 return .none
             }
-        }.forEach(\.path, action: /Action.detailsPath) {
+        }
+        .ifLet(\.$alert, action: \.alert)
+        .ifLet(\.$selection, action: /Action.selection) {
             AnimalFactsDetailsFeature()
         }
+    }
+    
+    private struct Constants {
+        static let paidAlertDurationSleep: CGFloat = 2
     }
     
 }
