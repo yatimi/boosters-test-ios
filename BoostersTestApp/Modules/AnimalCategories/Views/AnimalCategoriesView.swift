@@ -9,6 +9,7 @@ import SwiftUI
 import ComposableArchitecture
 
 struct AnimalCategoriesView: View {
+    typealias ViewStoreType = ViewStore<AnimalCategoriesFeature.State, AnimalCategoriesFeature.Action>
     
     let store: StoreOf<AnimalCategoriesFeature>
     
@@ -16,27 +17,14 @@ struct AnimalCategoriesView: View {
         WithViewStore(store, observe: { $0 }) { viewStore in
             ZStack {
                 if viewStore.animalCategories.isEmpty && !viewStore.isLoading {
-                    ContentUnavailableView {
-                        Text(Constants.contentUnavailableText)
-                    }
+                    contentUnavailableView()
                 } else {
-                    List {
-                        ForEach(viewStore.animalCategories, id: \.self) { category in
-                            AnimalCategoryItemView(category: category)
-                                .onTapGesture {
-                                    store.send(.didSelectCategory(category))
-                                }
-                        }
-                        .listRowSeparator(.hidden)
-                        .listRowBackground(Color.brandedPurple)
-                    }
-                    .listStyle(.plain)
-                    .navigationTitle(Constants.title)
-                    .background(.brandedPurple)
+                    categoriesList(with: viewStore)
                 }
-                
-                ActivityIndicatorView(isPresented: .constant(viewStore.isLoading))
             }
+            .loadingOverlay(
+                if: viewStore.isLoading
+            )
             .task {
                 viewStore.send(.fetchAnimalCategories)
             }
@@ -56,6 +44,28 @@ struct AnimalCategoriesView: View {
                 AnimalFactsDetailsView(store: store)
             }
         )
+    }
+    
+    private func contentUnavailableView() -> some View {
+        ContentUnavailableView {
+            Text(Constants.contentUnavailableText)
+        }
+    }
+    
+    private func categoriesList(with viewStore: ViewStoreType) -> some View {
+        List {
+            ForEach(viewStore.animalCategories, id: \.self) { category in
+                AnimalCategoryItemView(category: category)
+                    .onTapGesture {
+                        store.send(.didSelectCategory(category))
+                    }
+            }
+            .listRowSeparator(.hidden)
+            .listRowBackground(Color.brandedPurple)
+        }
+        .listStyle(.plain)
+        .navigationTitle(Constants.title)
+        .background(.brandedPurple)
     }
     
     private struct Constants {
